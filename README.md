@@ -4,27 +4,27 @@ A reproduction and extension of the hybrid neural ODE model of Wang et al. (2023
 
 This was a graduate research project for ENGR 521 at the University of Washington (Spring 2026), the project course paired with ENGR 520, Physics-Informed Machine Learning.
 
-**Report:** [link to paper]  ·  **Slides:** [link to slides]
+**Report:** [PDF](docs/report.pdf)  ·  **Slides:** [PDF](docs/slides.pdf)
 
 ## Background
 
-[One or two sentences on what Wang et al. (2023) did and why it matters: e.g., what the hybrid model predicts, which signals it uses, and what makes it "hybrid" (physics-based equations combined with a learned neural network term).]
+Wang, Garnier, and Rea (2023) applied neural ODEs to predicting the coupled dynamics of plasma current (I<sub>p</sub>) and internal inductance (l<sub>i</sub>) in a tokamak. These quantities matter for safely ramping down a plasma: reducing current tends to raise internal inductance, which is associated with reduced stability. Their starting point was a three-equation ODE model from Romero et al. (2010), in which two equations are exact and the third, governing a summary variable V that would otherwise require evolving PDEs, rests on a physics-motivated approximation. Replacing only that third equation with a neural network while keeping the exact physics produced a hybrid model (RomeroNNV) that outperformed both the original Romero model and a pure neural ODE (MlpODE) on 489 Alcator C-Mod shots.
 
-Reference: [full citation for Wang et al. (2023)]
+A. M. Wang, D. T. Garnier, and C. Rea, "Hybridizing Physics and Neural ODEs for Predicting Plasma Inductance Dynamics in Tokamak Fusion Reactors," arXiv:2310.20079 (2023).
+
+Reference: https://arxiv.org/abs/2310.20079 
 
 ## Key finding
 
-Beyond reproducing the original results, we asked whether the learned part of the model could be replaced with an interpretable equation using symbolic regression. A diagnostic of the trained model showed that it fits the loop-voltage signal rather than learning a governing physical law for it, which rules out symbolic regression as a path to an interpretable model. A separate sparse-regression analysis with PySINDy, which retained roughly 15 terms rather than a compact equation, supported the same conclusion.
-
-[Optional: one sentence on the noise-limited loop-voltage channel, if that's how the report frames it.]
+Beyond reproducing the original results, we asked whether the neural network that replaces the Romero model's empirical dV/dt equation could itself be replaced by a compact, interpretable equation found through symbolic regression. A diagnostic of the trained model showed that the network fit the dV/dt term to the data rather than learning a governing physical law for it, which rules out symbolic regression as a path to an interpretable model. A separate sparse-regression analysis with PySINDy, which retained roughly 15 terms rather than a compact equation, supported the same conclusion.
 
 ## Repository structure
 
 | Folder | Implementation | Author |
 |---|---|---|
 | `Julia_SciML/` | Julia, using the SciML ecosystem | Chris Billingham |
-| `JAX-implementation/` | JAX | Phil [surname] |
-| `torch-tokode/` | PyTorch | Tino [surname] |
+| `JAX-implementation/` | JAX | Phil Prior |
+| `torch-tokode/` | PyTorch | Tino Wells |
 
 Shared data-handling scripts at the top level:
 
@@ -39,19 +39,21 @@ The scripts expect the shot files in a folder named `romero_shots_489/` at the t
 
 ## Running the code
 
-[Brief instructions for each implementation: e.g., the Julia version and how to instantiate the environment, Python package requirements for the JAX and PyTorch versions, and which notebook or script to run first.]
+Each folder contains its own notebooks or scripts; the code expects the data folder described above.
 
 ## Team
 
-- **Chris Billingham**: project concept and organization, data acquisition, Julia SciML implementation, model diagnostic
-- **Phil [surname]**: JAX implementation, PySINDy analysis
-- **Tino [surname]**: PyTorch implementation
+- **Chris Billingham**: project proposal and organization, data acquisition, Julia SciML implementation, model diagnostic
+- **Phil Prior**: JAX implementation, PySINDy analysis
+- **Tino Wells**: PyTorch implementation
 
-Instructor: [name], University of Washington
+Instructor: Michelle Hickner, University of Washington - Dept of Mechanical Engineering
 
 ## Acknowledgments
 
-We thank Allen Wang (MIT) for sharing the Alcator C-Mod dataset used in this project.
+We thank Allen Wang (MIT) for sharing the Alcator C-Mod dataset used in this project. We would also 
+like to extend our gratitude to Raj Dandekar of Vizuara for first suggesting a re-implementation of Wang et al. (2023) as a starting point to explore symbolic regression and equation discovery.
+
 
 ## License
 
